@@ -12,3 +12,8 @@ CREATE TABLE IF NOT EXISTS `voteres` (
   `lastupdate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `choice` int(11) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+CREATE TABLE IF NOT EXISTS `voters` (
+  `id` varchar(100) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `val` varchar(200) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;

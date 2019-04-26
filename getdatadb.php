@@ -102,16 +102,12 @@ if (isset($_POST["param4"])) {
  else if ($function=='GETVOTERESULT') {
  
    $sql = "SELECT DIRNAME,SELECTION,COUNT(*) FROM VOTERES GROUP BY DIRNAME,SELECTION";
- } else if ($function=='PAYHISTORY_BYSTUDENTID') {
-   $sql = "SELECT DATE,TRACENO,DSCR,BILL,RECIVE FROM PAYS WHERE SCHOOLID=".$school." AND STUDENTID=".$param1." ORDER BY DATE DESC ";
+ } else if ($function=='GETVOTEIMPORT') {
+   $sql = "SELECT VID,DIRNAME,SELECTION FROM VOTERES";
    
-   } else if($function=='DOCCATGLIST') {
-   $sql = "SELECT DSC,ID FROM DOCCATG WHERE SCHOOLID=".$school." AND enable=1 ORDER BY ID ASC ";
-} else if ($function=='FINDDOC') {
-   $sql = "SELECT T1.DOCID,T2.DSC,T1.DOCNAME,T1.LOCATION,T1.DATEREG FROM (SELECT DOCID,DOCNAME,LOCATION,DATEREG FROM DOCRECORD WHERE SCHOOLID=".$school.") T1 LEFT OUTER JOIN (SELECT ID,DSC FROM DOCCATG WHERE SCHOOLID=".$school." AND ENABLE=1) T2 ON (T1.DOCCATG=T2.ID) WHERE INSTR(T1.DOCNAME,'".$param1."')>0"; 
-} else if ($function=='ROSTER_CLASS_BY_PROSTU') {
-  $sql = "SELECT T2.NAME,T2.CLASSID FROM (SELECT DISTINCT(CLASSID) DC FROM ROSTERS WHERE SCHOOLID=".$school." AND PROSTUID=".$param1.") T1 LEFT OUTER JOIN (SELECT CLASSID,NAME FROM CLASSES) T2 ON T1.DC=T2.CLASSID ";
-  }
+   } else if ($function=='GETTOTALV1') {
+     $sql = "SELECT val,count(val) FROM `voters` group by name,val having name in ('gender','region')";
+   }
 else if ($function=='PROSTUDYLIST') {
  $sess = session_id();
  $school = getValueSql($conn,"SELECT SCHOOLID FROM SESS WHERE SES='".$sess."'");
@@ -124,23 +120,7 @@ else if ($function=='PROSTUDYLIST') {
 	}  else {
 	  $sql = "SELECT DISTINCT(NAME) FROM PROGRAMS";
 	}
-} else if ($function=='ROSTERLIST') {
-  //echo $param2;
-  $sql = "SELECT T1.STARTTIME,T1.ENDTIME,T2.NAME FROM (SELECT SYLABUSID,STARTTIME,ENDTIME,ROSTERNAME,ROOM FROM ROSTERS WHERE SCHOOLID=".$school." AND PROSTUID=".$param1." AND CLASSID='".$param2."') T1 LEFT OUTER JOIN (SELECT NAME,TEACHER,DSC,ID FROM SYLABUS WHERE SCHOOLID=".$school." AND) T2 ON T1.SYLABUSID=T2.ID";
-  echo $sql;	
-} else if ($function=='STUDENTINFOBYID') {
- $sql = "SELECT ADDRESS,NAME FROM STUDENTS WHERE SCHOOLID=".$school." AND ID=".$param1;
-} else if ($function=='SYLABUS') {
- $sql = "SELECT NAME,ID FROM SYLABUS WHERE SCHOOLID=".$school." ";
- } else if ($function=='BOOKCATEGORY') {
-   $sql = "SELECT CATEGORY,PREFIX FROM LBOOKCATG WHERE SCHOOLID=".$school." ";
- } else if ($function=='BOOKCHECKBYISBN') {
-   $sql = "SELECT 'exist', COUNT(*) A1 FROM LBOOKS WHERE SCHOOLID=".$school." AND ISBN='".$param1."' ";
- } else if ($function=='BOOKSEARCH') {
-   $sql = "SELECT BOOKID, ISBN, REGDATE,TITLE,AUTHOR,REMARK,CATEGORY FROM LBOOKS WHERE SCHOOLID=".$school." AND INSTR(ISBN,'".$param1."')>0 AND INSTR(TITLE,'".$param2."')>0 AND INSTR(AUTHOR,'".$param3."')>0 ";
- } else if ($function=='BOOKINFOBYID') {
-   $sql = "SELECT ISBN,REGDATE,TITLE,AUTHOR,REMARK,CATEGORY FROM LBOOKS WHERE SCHOOLID=".$school." AND BOOKID='".$param1."' ";
- } else
+} else
    $sql = "SELECT CURRENT_TIMESTAMP aa, current_timestamp bb, '' cc";
    
 $result = $conn->query($sql);
